@@ -7,7 +7,8 @@ ARG ROS_DISTRO
 ENV DEBIAN_FRONTEND=noninteractive \
     RMW_IMPLEMENTATION=${RMW_IMPLEMENTATION} \
     BUILD_HOME=/var/lib/build \
-    OUSTER_ROS_PATH=/opt/ros2_ws/src/ouster-ros
+    OUSTER_ROS_PATH=/opt/ros2_ws/src/ouster-ros \
+    CYCLONEDDS_URI=file:///home/cyclonedds-config.xml
 
 RUN set -xue && \
     apt-get update && \
@@ -37,6 +38,7 @@ RUN set -xe \
 
 # Set up build environment
 COPY --chown=build:build . $OUSTER_ROS_PATH
+COPY cyclonedds-config.xml /home/cyclonedds-config.xml
 
 RUN set -xe         \
 && apt-get update   \
