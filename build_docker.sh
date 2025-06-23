@@ -1,0 +1,1 @@
+sudo docker build --build-arg ROS_DISTRO=humble --build-arg RMW_IMPLEMENTATION=rmw_cyclonedds_cpp --tag ouster-lidar:ros2-humble-cyclonedds .
