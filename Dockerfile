@@ -19,12 +19,19 @@ RUN set -xue && \
         python3-rosdep \
         python3-rospkg \
         python3-bloom \
-        python3-colcon-common-extensions
+        python3-colcon-common-extensions \
+        libzip-dev \
+        libflatbuffers-dev \
+        libeigen3-dev \
+        libcurl4-openssl-dev \
+        libspdlog-dev \
+        libjsoncpp-dev \
+        && rm -rf /var/lib/apt/lists/*
 
 RUN if [ "$RMW_IMPLEMENTATION" = "rmw_cyclonedds_cpp" ]; then \
-        apt-get install -y ros-${ROS_DISTRO}-rmw-cyclonedds-cpp; \
+        apt-get update && apt-get install -y ros-${ROS_DISTRO}-rmw-cyclonedds-cpp; \
     elif [ "$RMW_IMPLEMENTATION" = "rmw_zenoh_cpp" ]; then \
-        apt-get install -y ros-${ROS_DISTRO}-rmw-zenoh-cpp; \
+        apt-get update && apt-get install -y ros-${ROS_DISTRO}-rmw-zenoh-cpp; \
     fi
 
 # Set up non-root build user
@@ -58,7 +65,9 @@ SHELL ["/bin/bash", "-c"]
 
 RUN source /opt/ros/$ROS_DISTRO/setup.bash && colcon build \
     --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_CXX_FLAGS="-Wno-deprecated-declarations"
+    -DCMAKE_CXX_FLAGS="-Wno-deprecated-declarations" \
+    -DBUILD_VIZ=OFF \
+    -DBUILD_MAPPING=OFF
 
 RUN source /opt/ros/$ROS_DISTRO/setup.bash && colcon test \
     --ctest-args tests ouster_ros --rerun-failed --output-on-failure

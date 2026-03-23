@@ -1,0 +1,11 @@
+
+services:
+  ouster-lidar:
+    build:
+      context: .
+      no_cache: true
+      args:
+        ROS_DISTRO: humble
+        RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
+    image: ouster-lidar:ros2-humble-cyclonedds
+ 
